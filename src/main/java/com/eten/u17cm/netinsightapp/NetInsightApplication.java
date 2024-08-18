@@ -26,7 +26,7 @@ public class NetInsightApplication extends Application {
     }
 
     public static void main(String[] args) throws PcapException {
-        //launch();
+        launch();
 
         List<PcapIf> devices = Pcap.findAllDevs();
         if (devices.isEmpty()) {
