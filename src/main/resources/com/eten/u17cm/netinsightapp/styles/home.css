@@ -1,0 +1,26 @@
+.main-container {
+    -fx-background-color: #101010;
+}
+
+.sidebar {
+    -fx-background-color: #0D0D0D;
+    -fx-padding: 20px 20px;
+}
+
+.sidebar .title {
+    -fx-text-fill: #C0D1F4;
+    -fx-font-family: 'Helvetica';
+    -fx-font-size: 28px;
+    -fx-text-alignment: 'center';
+    -fx-font-weight: 800;
+}
+
+.sidebar .links .link {
+    -fx-font-family: 'Helvetica';
+    -fx-background-color: #1B1B1B;
+    -fx-text-fill: #219BFF;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 15px;
+    -fx-padding: 10px 0px;
+}

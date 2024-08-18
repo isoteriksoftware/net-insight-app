@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="660.0" spacing="10.0" styleClass="main-container" stylesheets="@styles/dashboard.css" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox maxWidth="1.7976931348623157E308" spacing="20.0">
+         <children>
+            <VBox spacing="10.0" styleClass="summary-card" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="title" text="Bandwidth Utilization" />
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label styleClass="metric" text="Current: 200 Mbps" />
+                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 150 Mbps" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" styleClass="summary-card" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="title" text="Latency" />
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label styleClass="metric" text="Current: 20 ms" />
+                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 15 ms" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox layoutX="310.0" layoutY="10.0" spacing="10.0" styleClass="summary-card" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="title" text="Packet Loss" />
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label styleClass="metric" text="Current: 0.1%" />
+                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.05%" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <LineChart prefHeight="250.0" title="Bandwidth Utilization Over Time">
+        <xAxis>
+          <CategoryAxis label="Bandwidth (Mbps)" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Time" side="LEFT" tickLabelFill="#c0d1f4" />
+        </yAxis>
+      </LineChart>
+      <LineChart layoutX="20.0" layoutY="111.0" prefHeight="250.0" title="Latency Over Time">
+         <xAxis>
+            <CategoryAxis label="Latency (ms)" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis label="Time" side="LEFT" tickLabelFill="#c0d1f4" />
+         </yAxis>
+      </LineChart>
+   </children>
+</VBox>

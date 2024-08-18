@@ -1,0 +1,69 @@
+.main-container {
+    -fx-background-color: #101010;
+    -fx-padding: 10px;
+}
+
+.summary-card {
+    -fx-background-color: #0D0D0D;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 13px;
+}
+
+.summary-card .title {
+    -fx-text-fill: #C0D1F4;
+    -fx-font-family: 'Helvetica';
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+}
+
+.summary-card .metric {
+    -fx-text-fill: #C0D1F4;
+    -fx-font-family: 'Helvetica';
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+}
+
+/* Style for line charts */
+.line-chart {
+    -fx-background-color: #f0f0f0; /* Background color */
+}
+
+/* Chart title */
+.chart-title {
+    -fx-font-weight: 500;
+    -fx-text-fill: #C0D1F4;
+}
+
+/* X-axis label */
+.chart-x-axis-label {
+    -fx-font-weight: 500;
+    -fx-text-fill: #C0D1F4;
+}
+
+/* Y-axis label */
+.chart-y-axis-label {
+    -fx-font-weight: 500;
+    -fx-text-fill: #C0D1F4;
+}
+
+/* Series colors */
+.chart-series0 {
+    -fx-stroke: #007ACC; /* Series 0 color */
+}
+
+.chart-series1 {
+    -fx-stroke: #70AD47; /* Series 1 color */
+}
+
+.chart-series2 {
+    -fx-stroke: #FFC000; /* Series 2 color */
+}
+
+/* Data point colors */
+.chart-line-symbol {
+    -fx-background-color: white, #007ACC; /* Data point color */
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 2px;
+    -fx-padding: 2px;
+}
+
