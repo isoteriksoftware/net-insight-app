@@ -5,27 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="375457d8-2ba0-4382-8e49-12cd98959a0a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/HelloController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/NetInsightApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/HomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/dashboard.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/hello-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/history.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/home.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/styles/dashboard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/styles/history.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/styles/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/NetInsightApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/NetInsightApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +100,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1723978927013</updated>
-      <workItem from="1723978928053" duration="2396000" />
+      <workItem from="1723978928053" duration="5658000" />
     </task>
     <servers />
   </component>

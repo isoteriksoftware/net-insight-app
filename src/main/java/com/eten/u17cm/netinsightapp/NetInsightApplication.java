@@ -8,26 +8,34 @@ import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapException;
 import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
-import org.jnetpcap.util.PcapUtils;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NetInsightApplication extends Application {
+    private long totalBytesReceived = 0;
+    private long previousTime = System.currentTimeMillis();
+    private static final long MONITOR_INTERVAL = 2000; // 1 second
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(NetInsightApplication.class.getResource("home.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 960, 600);
-        stage.setTitle("Net Insight");
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage stage) throws IOException, PcapException {
+//        FXMLLoader fxmlLoader = new FXMLLoader(NetInsightApplication.class.getResource("home.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), 960, 600);
+//        stage.setTitle("Net Insight");
+//        stage.setResizable(false);
+//        stage.setScene(scene);
+        //stage.show();
+
+        startMonitoring();
     }
 
-    public static void main(String[] args) throws PcapException {
+    public static void main(String[] args) {
         launch();
+    }
 
+    private void startMonitoring() throws PcapException {
         List<PcapIf> devices = Pcap.findAllDevs();
         if (devices.isEmpty()) {
             System.out.println("No devices found.");
@@ -52,24 +60,40 @@ public class NetInsightApplication extends Application {
             pcap.activate();
             System.out.println("Capturing packets on: " + selectedDevice.name());
 
-            // Capture packets indefinitely (or specify a count)
+            // Schedule a timer to update bandwidth utilization
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    updateBandwidthUtilization();
+                }
+            }, MONITOR_INTERVAL, MONITOR_INTERVAL);
+
+            // Start capturing packets
             pcap.loop(-1, (String msg, PcapHeader header, byte[] packet) -> {
-                // Extract timestamp
-                Instant timestamp = Instant.ofEpochMilli(header.toEpochMilli());
-
-                // Extract packet length
-                int wireLength = header.wireLength();
-                int capLength = header.captureLength();
-
-                // Format packet data
-                String hexDump = PcapUtils.toHexCurleyString(packet, 0, Math.min(64, packet.length));
-
-                // Print packet info
-                System.out.printf("Packet [timestamp=%s, wirelen=%-4d caplen=%-4d %s]%n",
-                        timestamp, wireLength, capLength, hexDump);
+                // Update total bytes received
+                totalBytesReceived += header.wireLength();
             }, "Hello World");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateBandwidthUtilization() {
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - previousTime;
+
+        System.out.println("Total bytes received: " + totalBytesReceived);
+
+        // Calculate bytes per second
+        double bytesPerSecond = (totalBytesReceived * 1000.0) / elapsedTime;
+        double bandwidthUtilization = (bytesPerSecond / 10000000.0) * 100; // Assuming 10 Mbps link
+
+        // Update the label
+        System.out.printf("Bandwidth Utilization: %.2f%%%n", bandwidthUtilization);
+
+        // Reset counters
+        totalBytesReceived = 0;
+        previousTime = currentTime;
     }
 }
