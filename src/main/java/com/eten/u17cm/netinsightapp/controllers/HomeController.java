@@ -1,9 +1,7 @@
 package com.eten.u17cm.netinsightapp.controllers;
 
 import com.eten.u17cm.netinsightapp.NetInsightApplication;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -12,18 +10,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable {
-    @FXML
+public class HomeController implements Controller {
     public Button btnMonitoring;
-
-    @FXML
     public Button btnHistory;
-
-    @FXML
     public StackPane contentView;
 
-    private Node dashboardView;
-    private Node historyView;
+    private Controller currentController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -32,19 +24,21 @@ public class HomeController implements Initializable {
         btnHistory.setOnAction(_ -> showHistory());
     }
 
-    private void showDashboard() {
-        if (dashboardView == null) {
-            dashboardView = loadView("dashboard.fxml");
+    @Override
+    public void dispose() {
+        if (currentController != null) {
+            currentController.dispose();
         }
+    }
+
+    private void showDashboard() {
+        Node dashboardView = loadView("dashboard.fxml");
 
         setView(dashboardView);
     }
 
     private void showHistory() {
-        if (historyView == null) {
-            historyView = loadView("history.fxml");
-        }
-
+        Node historyView = loadView("history.fxml");
         setView(historyView);
     }
 
@@ -56,9 +50,19 @@ public class HomeController implements Initializable {
     }
 
     private Node loadView(String fxmlFileName) {
+        // Dispose the current controller in a new thread
+        if (currentController != null) {
+            new Thread(() -> {
+                currentController.dispose();
+                currentController = null;
+            }).start();
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(NetInsightApplication.class.getResource(fxmlFileName));
-            return loader.load();
+            Node view = loader.load();
+            currentController = loader.getController();
+            return view;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

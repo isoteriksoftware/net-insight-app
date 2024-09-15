@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="375457d8-2ba0-4382-8e49-12cd98959a0a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/DashboardController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/NetInsightApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/NetInsightApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/home.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/home.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/styles/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/styles/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp/dashboard.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -44,23 +46,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NetInsightApplication.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/emris/Documents/Development/Misc/Fullstack/net-insight-app/src/main/resources/com/eten/u17cm/netinsightapp&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "Application.NetInsightApplication.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/emris/Documents/Development/Misc/Fullstack/net-insight-app/src/main/resources/com/eten/u17cm/netinsightapp",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/com/eten/u17cm/netinsightapp" />
@@ -70,7 +76,8 @@
     <configuration name="NetInsightApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.eten.u17cm.netinsightapp.NetInsightApplication" />
       <module name="net-insight-app" />
-      <option name="PROGRAM_PARAMETERS" value="-Djava.library.path=/opt/local/lib --enable-native-access=org.jnetpcap --enable-preview" />
+      <option name="PROGRAM_PARAMETERS" value="-Djava.library.path=/opt/local/lib" />
+      <option name="VM_PARAMETERS" value="--enable-native-access=org.jnetpcap --enable-preview" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.eten.u17cm.netinsightapp.*" />
@@ -104,7 +111,7 @@
       <option name="presentableId" value="Default" />
       <updated>1723978927013</updated>
       <workItem from="1723978928053" duration="5658000" />
-      <workItem from="1726425219592" duration="849000" />
+      <workItem from="1726425219592" duration="6862000" />
     </task>
     <servers />
   </component>

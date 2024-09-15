@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="660.0" spacing="10.0" styleClass="main-container" stylesheets="@styles/dashboard.css" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="660.0" spacing="10.0" styleClass="main-container" stylesheets="@styles/dashboard.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.eten.u17cm.netinsightapp.controllers.DashboardController">
    <children>
       <HBox maxWidth="1.7976931348623157E308" spacing="20.0">
          <children>
@@ -16,8 +16,8 @@
                   <Label styleClass="title" text="Bandwidth Utilization" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label styleClass="metric" text="Current: 200 Mbps" />
-                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 150 Mbps" />
+                        <Label fx:id="currentBandwidth" styleClass="metric" text="Current: 200 Mbps" />
+                        <Label fx:id="averageBandwidth" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 150 Mbps" />
                      </children>
                   </VBox>
                </children>
@@ -27,8 +27,8 @@
                   <Label styleClass="title" text="Latency" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label styleClass="metric" text="Current: 20 ms" />
-                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 15 ms" />
+                        <Label fx:id="currentLatency" styleClass="metric" text="Current: 20 ms" />
+                        <Label fx:id="averageLatency" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 15 ms" />
                      </children>
                   </VBox>
                </children>
@@ -38,8 +38,8 @@
                   <Label styleClass="title" text="Packet Loss" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label styleClass="metric" text="Current: 0.1%" />
-                        <Label layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.05%" />
+                        <Label fx:id="currentPacketLoss" styleClass="metric" text="Current: 0.1%" />
+                        <Label fx:id="averagePacketLoss" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.05%" />
                      </children>
                   </VBox>
                </children>
