@@ -20,16 +20,22 @@ public class DashboardController implements Controller {
     private static final long DEVICE_LINK_SPEED_BYTES_PER_SECOND = 108_250_000; // 866 Mbps
 
     public Label currentBandwidth;
+    public Label averageBandwidth;
 
     private volatile boolean running = true; // Flag to stop the background thread
+
     private Thread monitoringThread; // The monitoring thread
     private Pcap pcap; // Pcap instance to be closed properly
     private long totalBytesReceived = 0;
+    private long totalBytesReceivedAllTime = 0; // Total bytes received over the entire monitoring period
     private long previousTime = 0;
+    private long startTime; // Start time of monitoring
+    private double averageBandwidthMbps = 0; // Average bandwidth in Mbps
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         previousTime = System.currentTimeMillis();
+        startTime = previousTime; // Initialize start time
 
         // Start monitoring in a new thread
         monitoringThread = new Thread(() -> {
@@ -106,15 +112,21 @@ public class DashboardController implements Controller {
 
         // Calculate bytes per second
         double bytesPerSecond = (totalBytesReceived * 1000.0) / elapsedTime;
-
-        // Convert bytes per second to bits per second
         double bitsPerSecond = bytesPerSecond * 8;
-
-        // Convert bits per second to megabits per second
         double megabitsPerSecond = bitsPerSecond / 1_000_000;
 
-        // Update the label
+        // Update the current bandwidth label
         Platform.runLater(() -> currentBandwidth.setText(String.format("Current: %.2f Mbps", megabitsPerSecond)));
+
+        // Update total bytes received all time and calculate average bandwidth
+        totalBytesReceivedAllTime += totalBytesReceived;
+        long totalElapsedTime = currentTime - startTime; // Total elapsed time in milliseconds
+        double averageBytesPerSecond = (totalBytesReceivedAllTime * 1000.0) / totalElapsedTime;
+        double averageBitsPerSecond = averageBytesPerSecond * 8;
+        averageBandwidthMbps = averageBitsPerSecond / 1_000_000;
+
+        // Update the average bandwidth label
+        Platform.runLater(() -> averageBandwidth.setText(String.format("Average: %.2f Mbps", averageBandwidthMbps)));
 
         // Reset counters
         totalBytesReceived = 0;
