@@ -106,10 +106,15 @@ public class DashboardController implements Controller {
 
         // Calculate bytes per second
         double bytesPerSecond = (totalBytesReceived * 1000.0) / elapsedTime;
-        double bandwidthUtilization = (bytesPerSecond / DEVICE_LINK_SPEED_BYTES_PER_SECOND) * 100;
+
+        // Convert bytes per second to bits per second
+        double bitsPerSecond = bytesPerSecond * 8;
+
+        // Convert bits per second to megabits per second
+        double megabitsPerSecond = bitsPerSecond / 1_000_000;
 
         // Update the label
-        Platform.runLater(() -> currentBandwidth.setText(String.format("Current: %.2f%%", bandwidthUtilization)));
+        Platform.runLater(() -> currentBandwidth.setText(String.format("Current: %.2f Mbps", megabitsPerSecond)));
 
         // Reset counters
         totalBytesReceived = 0;

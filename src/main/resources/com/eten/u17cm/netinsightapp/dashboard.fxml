@@ -16,8 +16,8 @@
                   <Label styleClass="title" text="Bandwidth Utilization" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label fx:id="currentBandwidth" styleClass="metric" text="Current: 200 Mbps" />
-                        <Label fx:id="averageBandwidth" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 150 Mbps" />
+                        <Label fx:id="currentBandwidth" styleClass="metric" text="Current: 0.00 Mbps" />
+                        <Label fx:id="averageBandwidth" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.00 Mbps" />
                      </children>
                   </VBox>
                </children>
@@ -27,8 +27,8 @@
                   <Label styleClass="title" text="Latency" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label fx:id="currentLatency" styleClass="metric" text="Current: 20 ms" />
-                        <Label fx:id="averageLatency" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 15 ms" />
+                        <Label fx:id="currentLatency" styleClass="metric" text="Current: 0 ms" />
+                        <Label fx:id="averageLatency" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0 ms" />
                      </children>
                   </VBox>
                </children>
@@ -38,8 +38,8 @@
                   <Label styleClass="title" text="Packet Loss" />
                   <VBox spacing="5.0">
                      <children>
-                        <Label fx:id="currentPacketLoss" styleClass="metric" text="Current: 0.1%" />
-                        <Label fx:id="averagePacketLoss" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.05%" />
+                        <Label fx:id="currentPacketLoss" styleClass="metric" text="Current: 0.00%" />
+                        <Label fx:id="averagePacketLoss" layoutX="10.0" layoutY="10.0" styleClass="metric" text="Average: 0.00%" />
                      </children>
                   </VBox>
                </children>
