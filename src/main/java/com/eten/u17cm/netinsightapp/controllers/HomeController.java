@@ -14,16 +14,22 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
     @FXML
-    public Button btnDashboard;
+    public Button btnMonitoring;
+
+    @FXML
+    public Button btnHistory;
 
     @FXML
     public StackPane contentView;
 
     private Node dashboardView;
+    private Node historyView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showDashboard();
+        btnMonitoring.setOnAction(_ -> showDashboard());
+        btnHistory.setOnAction(_ -> showHistory());
     }
 
     private void showDashboard() {
@@ -32,6 +38,14 @@ public class HomeController implements Initializable {
         }
 
         setView(dashboardView);
+    }
+
+    private void showHistory() {
+        if (historyView == null) {
+            historyView = loadView("history.fxml");
+        }
+
+        setView(historyView);
     }
 
     private void setView(Node view) {

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" styleClass="main-container" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eten.u17cm.netinsightapp.controllers.HomeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" styleClass="main-container" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.eten.u17cm.netinsightapp.controllers.HomeController">
    <stylesheets>
       <URL value="@styles/home.css" />
    </stylesheets>
@@ -26,11 +26,9 @@
                   <Insets top="104.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="btnDashboard" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Dashboard" />
-                  <Button layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Monitoring" />
-                  <Button layoutX="10.0" layoutY="75.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="History" />
+                  <Button fx:id="btnMonitoring" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Monitoring" />
+                  <Button fx:id="btnHistory" layoutX="10.0" layoutY="75.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="History" />
                   <Button layoutX="10.0" layoutY="140.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Alerts" />
-                  <Button layoutX="10.0" layoutY="205.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Reports" />
                   <Button layoutX="10.0" layoutY="270.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="link" text="Settings" />
                </children>
             </VBox>
