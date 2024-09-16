@@ -10,7 +10,6 @@ import org.jnetpcap.PcapIf;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,6 +25,8 @@ public class DashboardController implements Controller {
     public Label averageBandwidth;
     public Label currentLatency;
     public Label averageLatency;
+    public Label currentPacketLoss;
+    public Label averagePacketLoss;
 
     private volatile boolean running = true; // Flag to stop the background thread
     private Thread monitoringThread; // The monitoring thread
@@ -39,6 +40,11 @@ public class DashboardController implements Controller {
     private long totalLatencyTime = 0; // Total latency time for average calculation
     private int latencyCount = 0; // Count of latency measurements
     private double averageLatencyMs = 0; // Average latency in milliseconds
+
+    private int packetsSent = 0; // Total packets sent for ping
+    private int packetsReceived = 0; // Total packets received for ping
+    private double currentPacketLossPercentage = 0; // Current packet loss percentage
+    private double averagePacketLossPercentage = 0; // Average packet loss percentage
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -150,12 +156,13 @@ public class DashboardController implements Controller {
 
             if (os.contains("win")) {
                 // Windows ping command
-                processBuilder = new ProcessBuilder("ping", "-n", "1", "-w", "1000", PING_TARGET); // 1 second timeout
+                processBuilder = new ProcessBuilder("ping", "-n", "4", "-w", "1000", PING_TARGET); // 1 second timeout
             } else {
                 // Linux/macOS ping command
-                processBuilder = new ProcessBuilder("ping", "-c", "1", "-W", "1", PING_TARGET); // 1 second timeout
+                processBuilder = new ProcessBuilder("ping", "-c", "4", "-W", "1", PING_TARGET); // 1 second timeout
             }
 
+            packetsSent++; // Increment the total packets sent counter
             Process process = processBuilder.start();
 
             // Read the output of the ping command
@@ -182,9 +189,14 @@ public class DashboardController implements Controller {
                 // Successful ping and RTT found
                 totalLatencyTime += rtt;
                 latencyCount++;
+                packetsReceived++; // Increment packets received counter
 
                 // Calculate average latency
                 averageLatencyMs = totalLatencyTime / (double) latencyCount;
+
+                // Calculate packet loss
+                currentPacketLossPercentage = ((double)(packetsSent - packetsReceived) / packetsSent) * 100;
+                averagePacketLossPercentage = currentPacketLossPercentage; // You can also calculate a weighted average
 
                 // Update the current latency label
                 long finalRtt = rtt;
@@ -192,11 +204,20 @@ public class DashboardController implements Controller {
 
                 // Update the average latency label
                 Platform.runLater(() -> averageLatency.setText(String.format("Average: %.2f ms", averageLatencyMs)));
+
+                // Update current packet loss
+                Platform.runLater(() -> currentPacketLoss.setText(String.format("Current: %.2f%%", currentPacketLossPercentage)));
+
+                // Update average packet loss
+                Platform.runLater(() -> averagePacketLoss.setText(String.format("Average: %.2f%%", averagePacketLossPercentage)));
             } else {
                 // Ping failed or RTT not found, mark as unreachable
                 Platform.runLater(() -> currentLatency.setText("Latency: Unreachable"));
-            }
 
+                // Packet loss is 100% for this ping
+                currentPacketLossPercentage = 100;
+                Platform.runLater(() -> currentPacketLoss.setText("Packet Loss: 100%"));
+            }
         } catch (Exception e) {
             NetInsightApplication.showError("Failed to measure latency: " + e.getMessage());
             e.printStackTrace();
