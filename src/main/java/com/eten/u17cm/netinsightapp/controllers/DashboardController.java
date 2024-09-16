@@ -2,8 +2,6 @@ package com.eten.u17cm.netinsightapp.controllers;
 
 import com.eten.u17cm.netinsightapp.NetInsightApplication;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
@@ -19,6 +17,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class DashboardController implements Controller {
     private static final long MONITOR_INTERVAL = 500; // 1 second
@@ -159,8 +160,11 @@ public class DashboardController implements Controller {
         // Update the average bandwidth label
         Platform.runLater(() -> averageBandwidth.setText(String.format("Average: %.2f Mbps", averageBandwidthMbps)));
 
-        // Add data to the chart
-        String timeLabel = String.format("%d", (currentTime - startTime) / 1000); // Time in seconds
+        // Format the time label
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                .withZone(ZoneId.systemDefault());
+        String timeLabel = formatter.format(Instant.ofEpochMilli(currentTime));
+
         final XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(timeLabel, megabitsPerSecond);
 
         // Update chart data on the FX Application Thread
@@ -247,8 +251,12 @@ public class DashboardController implements Controller {
 
             final long finalRtt = rtt;
             Platform.runLater(() -> {
+                // Format the time label
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                        .withZone(ZoneId.systemDefault());
+                String timeLabel = formatter.format(Instant.ofEpochMilli(System.currentTimeMillis()));
+
                 // Update latency chart
-                String timeLabel = String.format("%d", (System.currentTimeMillis() - startTime) / 1000); // Time in seconds
                 if (latencySeries.getData().size() > MAX_DATA_POINTS) {
                     latencySeries.getData().removeFirst(); // Remove the oldest data point
                 }
