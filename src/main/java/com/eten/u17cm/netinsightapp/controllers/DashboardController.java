@@ -54,7 +54,7 @@ public class DashboardController implements Controller {
     private double currentPacketLossPercentage = 0; // Current packet loss percentage
     private double averagePacketLossPercentage = 0; // Average packet loss percentage
 
-    private static final int MAX_DATA_POINTS = 30; // Maximum number of data points to display on the chart
+    private static final int MAX_DATA_POINTS = 5; // Maximum number of data points to display on the chart
     private final XYChart.Series<String, Number> bandwidthSeries = new XYChart.Series<>();
     private final XYChart.Series<String, Number> latencySeries = new XYChart.Series<>();
 
@@ -160,8 +160,8 @@ public class DashboardController implements Controller {
         // Update the average bandwidth label
         Platform.runLater(() -> averageBandwidth.setText(String.format("Average: %.2f Mbps", averageBandwidthMbps)));
 
-        // Format the time label
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        // Format the time label with AM/PM
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a")
                 .withZone(ZoneId.systemDefault());
         String timeLabel = formatter.format(Instant.ofEpochMilli(currentTime));
 
@@ -251,8 +251,8 @@ public class DashboardController implements Controller {
 
             final long finalRtt = rtt;
             Platform.runLater(() -> {
-                // Format the time label
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                // Format the time label with AM/PM
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a")
                         .withZone(ZoneId.systemDefault());
                 String timeLabel = formatter.format(Instant.ofEpochMilli(System.currentTimeMillis()));
 

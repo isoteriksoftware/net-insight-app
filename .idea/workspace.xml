@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="375457d8-2ba0-4382-8e49-12cd98959a0a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/DashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eten/u17cm/netinsightapp/controllers/DashboardController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +107,7 @@
       <option name="presentableId" value="Default" />
       <updated>1723978927013</updated>
       <workItem from="1723978928053" duration="5658000" />
-      <workItem from="1726425219592" duration="15641000" />
+      <workItem from="1726425219592" duration="16839000" />
     </task>
     <servers />
   </component>
