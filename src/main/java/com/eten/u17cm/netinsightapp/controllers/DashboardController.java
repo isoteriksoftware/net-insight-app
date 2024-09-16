@@ -8,6 +8,7 @@ import org.jnetpcap.PcapException;
 import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
 
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -17,13 +18,14 @@ import java.util.TimerTask;
 public class DashboardController implements Controller {
     private static final long MONITOR_INTERVAL = 1000; // 1 second
     private static final String TARGET_DEVICE = "en0"; // The device to monitor
-    private static final long DEVICE_LINK_SPEED_BYTES_PER_SECOND = 108_250_000; // 866 Mbps
+    private static final String PING_TARGET = "8.8.8.8"; // Target for latency (Google DNS)
 
     public Label currentBandwidth;
     public Label averageBandwidth;
+    public Label currentLatency;
+    public Label averageLatency;
 
     private volatile boolean running = true; // Flag to stop the background thread
-
     private Thread monitoringThread; // The monitoring thread
     private Pcap pcap; // Pcap instance to be closed properly
     private long totalBytesReceived = 0;
@@ -31,6 +33,10 @@ public class DashboardController implements Controller {
     private long previousTime = 0;
     private long startTime; // Start time of monitoring
     private double averageBandwidthMbps = 0; // Average bandwidth in Mbps
+
+    private long totalLatencyTime = 0; // Total latency time for average calculation
+    private int latencyCount = 0; // Count of latency measurements
+    private double averageLatencyMs = 0; // Average latency in milliseconds
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -76,7 +82,7 @@ public class DashboardController implements Controller {
             pcap.setTimeout(1000);  // Set timeout to 1 second
             pcap.activate();
 
-            // Schedule a timer to update bandwidth utilization
+            // Schedule a timer to update bandwidth and latency
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -86,6 +92,7 @@ public class DashboardController implements Controller {
                         return;
                     }
                     updateBandwidthUtilization();
+                    measureLatency(); // Measure latency every interval
                 }
             }, MONITOR_INTERVAL, MONITOR_INTERVAL);
 
@@ -131,6 +138,37 @@ public class DashboardController implements Controller {
         // Reset counters
         totalBytesReceived = 0;
         previousTime = currentTime;
+    }
+
+    private void measureLatency() {
+        try {
+            // Use ICMP ping to measure latency to the target (Google DNS in this case)
+            InetAddress target = InetAddress.getByName(PING_TARGET);
+            long start = System.currentTimeMillis();
+
+            // Ping the target (timeout set to 1000ms)
+            boolean reachable = target.isReachable(1000);
+            System.out.println("Ping " + PING_TARGET + " reachable: " + reachable);
+            long end = System.currentTimeMillis();
+
+            if (reachable) {
+                long rtt = end - start; // Round Trip Time (RTT) in milliseconds
+                totalLatencyTime += rtt;
+                latencyCount++;
+
+                // Calculate average latency
+                averageLatencyMs = totalLatencyTime / (double) latencyCount;
+
+                // Update the current latency label
+                Platform.runLater(() -> currentLatency.setText(String.format("Latency: %d ms", rtt)));
+
+                // Update the average latency label
+                Platform.runLater(() -> averageLatency.setText(String.format("Avg Latency: %.2f ms", averageLatencyMs)));
+            }
+        } catch (Exception e) {
+            NetInsightApplication.showError("Failed to measure latency: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
