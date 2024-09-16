@@ -8,6 +8,8 @@ import org.jnetpcap.PcapException;
 import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.List;
@@ -142,17 +144,42 @@ public class DashboardController implements Controller {
 
     private void measureLatency() {
         try {
-            // Use ICMP ping to measure latency to the target (Google DNS in this case)
-            InetAddress target = InetAddress.getByName(PING_TARGET);
-            long start = System.currentTimeMillis();
+            // Detect the OS
+            String os = System.getProperty("os.name").toLowerCase();
+            ProcessBuilder processBuilder;
 
-            // Ping the target (timeout set to 1000ms)
-            boolean reachable = target.isReachable(1000);
-            System.out.println("Ping " + PING_TARGET + " reachable: " + reachable);
-            long end = System.currentTimeMillis();
+            if (os.contains("win")) {
+                // Windows ping command
+                processBuilder = new ProcessBuilder("ping", "-n", "1", "-w", "1000", PING_TARGET); // 1 second timeout
+            } else {
+                // Linux/macOS ping command
+                processBuilder = new ProcessBuilder("ping", "-c", "1", "-W", "1", PING_TARGET); // 1 second timeout
+            }
 
-            if (reachable) {
-                long rtt = end - start; // Round Trip Time (RTT) in milliseconds
+            Process process = processBuilder.start();
+
+            // Read the output of the ping command
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            long rtt = -1;
+
+            // Parse the ping output to find the RTT
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("round-trip") || line.contains("Average =")) {
+                    // For Linux/macOS: "round-trip min/avg/max/stddev"
+                    // For Windows: "Minimum = xxms, Maximum = xxms, Average = xxms"
+                    String[] parts = os.contains("win") ?
+                            line.split(" = ")[1].split("ms")[1].split(",") : line.split(" = ")[1].split("/");
+
+                    rtt = os.contains("win") ? Long.parseLong(parts[2].replaceAll("\\D", "")) :
+                            Math.round(Double.parseDouble(parts[1])); // Average RTT in ms
+                    break;
+                }
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0 && rtt != -1) {
+                // Successful ping and RTT found
                 totalLatencyTime += rtt;
                 latencyCount++;
 
@@ -160,11 +187,16 @@ public class DashboardController implements Controller {
                 averageLatencyMs = totalLatencyTime / (double) latencyCount;
 
                 // Update the current latency label
-                Platform.runLater(() -> currentLatency.setText(String.format("Latency: %d ms", rtt)));
+                long finalRtt = rtt;
+                Platform.runLater(() -> currentLatency.setText(String.format("Current: %d ms", finalRtt)));
 
                 // Update the average latency label
-                Platform.runLater(() -> averageLatency.setText(String.format("Avg Latency: %.2f ms", averageLatencyMs)));
+                Platform.runLater(() -> averageLatency.setText(String.format("Average: %.2f ms", averageLatencyMs)));
+            } else {
+                // Ping failed or RTT not found, mark as unreachable
+                Platform.runLater(() -> currentLatency.setText("Latency: Unreachable"));
             }
+
         } catch (Exception e) {
             NetInsightApplication.showError("Failed to measure latency: " + e.getMessage());
             e.printStackTrace();
