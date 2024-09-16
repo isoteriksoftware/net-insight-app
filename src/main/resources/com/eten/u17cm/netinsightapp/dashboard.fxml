@@ -48,18 +48,18 @@
       </HBox>
       <LineChart fx:id="bandwidthChart" prefHeight="250.0" title="Bandwidth Utilization Over Time">
         <xAxis>
-          <CategoryAxis label="Bandwidth (Mbps)" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
+          <CategoryAxis label="Time" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
         </xAxis>
         <yAxis>
-          <NumberAxis label="Time" side="LEFT" tickLabelFill="#c0d1f4" />
+          <NumberAxis label="Bandwidth (Mbps)" side="LEFT" tickLabelFill="#c0d1f4" />
         </yAxis>
       </LineChart>
       <LineChart fx:id="latencyChart" layoutX="20.0" layoutY="111.0" prefHeight="250.0" title="Latency Over Time">
          <xAxis>
-            <CategoryAxis label="Latency (ms)" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
+            <CategoryAxis label="Time" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
          </xAxis>
          <yAxis>
-            <NumberAxis label="Time" side="LEFT" tickLabelFill="#c0d1f4" />
+            <NumberAxis label="Latency (ms)" side="LEFT" tickLabelFill="#c0d1f4" />
          </yAxis>
       </LineChart>
    </children>

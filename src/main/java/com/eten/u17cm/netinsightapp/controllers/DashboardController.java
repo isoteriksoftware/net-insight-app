@@ -2,6 +2,10 @@ package com.eten.u17cm.netinsightapp.controllers;
 
 import com.eten.u17cm.netinsightapp.NetInsightApplication;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapException;
@@ -17,7 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DashboardController implements Controller {
-    private static final long MONITOR_INTERVAL = 1000; // 1 second
+    private static final long MONITOR_INTERVAL = 500; // 1 second
     private static final String TARGET_DEVICE = "en0"; // The device to monitor
     private static final String PING_TARGET = "8.8.8.8"; // Target for latency (Google DNS)
 
@@ -27,8 +31,11 @@ public class DashboardController implements Controller {
     public Label averageLatency;
     public Label currentPacketLoss;
     public Label averagePacketLoss;
+    public LineChart<String, Number> bandwidthChart;
+    public LineChart<String, Number> latencyChart;
 
     private volatile boolean running = true; // Flag to stop the background thread
+
     private Thread monitoringThread; // The monitoring thread
     private Pcap pcap; // Pcap instance to be closed properly
     private long totalBytesReceived = 0;
@@ -46,10 +53,19 @@ public class DashboardController implements Controller {
     private double currentPacketLossPercentage = 0; // Current packet loss percentage
     private double averagePacketLossPercentage = 0; // Average packet loss percentage
 
+    private static final int MAX_DATA_POINTS = 30; // Maximum number of data points to display on the chart
+    private final XYChart.Series<String, Number> bandwidthSeries = new XYChart.Series<>();
+    private final XYChart.Series<String, Number> latencySeries = new XYChart.Series<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         previousTime = System.currentTimeMillis();
         startTime = previousTime; // Initialize start time
+
+        bandwidthChart.getData().clear();
+        latencyChart.getData().clear();
+        bandwidthChart.getData().add(bandwidthSeries);
+        latencyChart.getData().add(latencySeries);
 
         // Start monitoring in a new thread
         monitoringThread = new Thread(() -> {
@@ -143,6 +159,18 @@ public class DashboardController implements Controller {
         // Update the average bandwidth label
         Platform.runLater(() -> averageBandwidth.setText(String.format("Average: %.2f Mbps", averageBandwidthMbps)));
 
+        // Add data to the chart
+        String timeLabel = String.format("%d", (currentTime - startTime) / 1000); // Time in seconds
+        final XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(timeLabel, megabitsPerSecond);
+
+        // Update chart data on the FX Application Thread
+        Platform.runLater(() -> {
+            if (bandwidthSeries.getData().size() > MAX_DATA_POINTS) {
+                bandwidthSeries.getData().removeFirst(); // Remove the oldest data point
+            }
+            bandwidthSeries.getData().add(dataPoint);
+        });
+
         // Reset counters
         totalBytesReceived = 0;
         previousTime = currentTime;
@@ -198,26 +226,34 @@ public class DashboardController implements Controller {
                 currentPacketLossPercentage = ((double)(packetsSent - packetsReceived) / packetsSent) * 100;
                 averagePacketLossPercentage = currentPacketLossPercentage; // You can also calculate a weighted average
 
-                // Update the current latency label
+                // Update the labels
                 long finalRtt = rtt;
-                Platform.runLater(() -> currentLatency.setText(String.format("Current: %d ms", finalRtt)));
-
-                // Update the average latency label
-                Platform.runLater(() -> averageLatency.setText(String.format("Average: %.2f ms", averageLatencyMs)));
-
-                // Update current packet loss
-                Platform.runLater(() -> currentPacketLoss.setText(String.format("Current: %.2f%%", currentPacketLossPercentage)));
-
-                // Update average packet loss
-                Platform.runLater(() -> averagePacketLoss.setText(String.format("Average: %.2f%%", averagePacketLossPercentage)));
+                Platform.runLater(() -> {
+                    currentLatency.setText(String.format("Current: %d ms", finalRtt));
+                    averageLatency.setText(String.format("Average: %.2f ms", averageLatencyMs));
+                    currentPacketLoss.setText(String.format("Current: %.2f%%", currentPacketLossPercentage));
+                    averagePacketLoss.setText(String.format("Average: %.2f%%", averagePacketLossPercentage));
+                });
             } else {
                 // Ping failed or RTT not found, mark as unreachable
-                Platform.runLater(() -> currentLatency.setText("Latency: Unreachable"));
-
                 // Packet loss is 100% for this ping
                 currentPacketLossPercentage = 100;
-                Platform.runLater(() -> currentPacketLoss.setText("Packet Loss: 100%"));
+
+                Platform.runLater(() -> {
+                    currentLatency.setText("Latency: Unreachable");
+                    currentPacketLoss.setText("Packet Loss: 100%");
+                });
             }
+
+            final long finalRtt = rtt;
+            Platform.runLater(() -> {
+                // Update latency chart
+                String timeLabel = String.format("%d", (System.currentTimeMillis() - startTime) / 1000); // Time in seconds
+                if (latencySeries.getData().size() > MAX_DATA_POINTS) {
+                    latencySeries.getData().removeFirst(); // Remove the oldest data point
+                }
+                latencySeries.getData().add(new XYChart.Data<>(timeLabel, finalRtt));
+            });
         } catch (Exception e) {
             NetInsightApplication.showError("Failed to measure latency: " + e.getMessage());
             e.printStackTrace();
