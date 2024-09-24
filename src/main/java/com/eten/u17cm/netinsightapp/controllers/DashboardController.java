@@ -11,6 +11,7 @@ import org.jnetpcap.PcapHeader;
 import org.jnetpcap.PcapIf;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
@@ -22,8 +23,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class DashboardController implements Controller {
-    private static final long MONITOR_INTERVAL = 500; // 1 second
-    private static final String TARGET_DEVICE = "en0"; // The device to monitor
+    private static final long MONITOR_INTERVAL = 500; // half second
+    private static final String TARGET_DEVICE = "wlo1"; // The device to monitor
     private static final String PING_TARGET = "8.8.8.8"; // Target for latency (Google DNS)
 
     public Label currentBandwidth;
@@ -204,14 +205,15 @@ public class DashboardController implements Controller {
 
             // Parse the ping output to find the RTT
             while ((line = reader.readLine()) != null) {
-                if (line.contains("round-trip") || line.contains("Average =")) {
-                    // For Linux/macOS: "round-trip min/avg/max/stddev"
-                    // For Windows: "Minimum = xxms, Maximum = xxms, Average = xxms"
-                    String[] parts = os.contains("win") ?
-                            line.split(" = ")[1].split("ms")[1].split(",") : line.split(" = ")[1].split("/");
-
-                    rtt = os.contains("win") ? Long.parseLong(parts[2].replaceAll("\\D", "")) :
-                            Math.round(Double.parseDouble(parts[1])); // Average RTT in ms
+                if (os.contains("win") && line.contains("Average =")) {
+                    // Windows ping output parsing
+                    String[] parts = line.split("Average = ")[1].split("ms")[0].trim().split(" ");
+                    rtt = Long.parseLong(parts[0]);
+                    break;
+                } else if (!os.contains("win") && line.contains("rtt min/avg/max/mdev")) {
+                    // Linux/macOS ping output parsing
+                    String[] parts = line.split(" = ")[1].split("/");
+                    rtt = Math.round(Double.parseDouble(parts[1])); // Extract average RTT
                     break;
                 }
             }
@@ -228,7 +230,7 @@ public class DashboardController implements Controller {
 
                 // Calculate packet loss
                 currentPacketLossPercentage = ((double)(packetsSent - packetsReceived) / packetsSent) * 100;
-                averagePacketLossPercentage = currentPacketLossPercentage; // You can also calculate a weighted average
+                averagePacketLossPercentage = currentPacketLossPercentage;
 
                 // Update the labels
                 long finalRtt = rtt;
@@ -240,7 +242,6 @@ public class DashboardController implements Controller {
                 });
             } else {
                 // Ping failed or RTT not found, mark as unreachable
-                // Packet loss is 100% for this ping
                 currentPacketLossPercentage = 100;
 
                 Platform.runLater(() -> {
@@ -262,8 +263,14 @@ public class DashboardController implements Controller {
                 }
                 latencySeries.getData().add(new XYChart.Data<>(timeLabel, finalRtt));
             });
-        } catch (Exception e) {
-            NetInsightApplication.showError("Failed to measure latency: " + e.getMessage());
+        } catch (IOException e) {
+            NetInsightApplication.showError("Error executing ping command: " + e.getMessage());
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            NetInsightApplication.showError("Ping process interrupted: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            NetInsightApplication.showError("Failed to parse RTT: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -273,7 +280,7 @@ public class DashboardController implements Controller {
         running = false; // Signal the background thread to stop
         if (pcap != null) {
             pcap.breakloop(); // Break the packet capture loop
-            pcap.close(); // Properly close the Pcap instance to release resources
+            //pcap.close(); // Properly close the Pcap instance to release resources
         }
         if (monitoringThread != null && monitoringThread.isAlive()) {
             try {
