@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" styleClass="main-container" stylesheets="@styles/history.css" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" styleClass="main-container" stylesheets="@styles/history.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.eten.u17cm.netinsightapp.controllers.HistoryController">
    <children>
-      <LineChart prefHeight="150.0" title="Bandwidth Utilization Over Time">
-        <xAxis>
-          <CategoryAxis label="Bandwidth (Mbps)" side="BOTTOM" style="-fx-text-fill: #c0d1f4" tickLabelFill="#c0d1f4" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis label="Time" side="LEFT" tickLabelFill="#c0d1f4" />
-        </yAxis>
-      </LineChart>
-      <TableView prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableView" prefHeight="389.0" prefWidth="580.0">
         <columns>
-          <TableColumn editable="false" prefWidth="100.0" text="Date" />
-          <TableColumn editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Bandwidth (Mbps)" />
-            <TableColumn editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Latency (ms)" />
-            <TableColumn editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Packet Loss" />
+          <TableColumn fx:id="dateColumn" editable="false" prefWidth="100.0" text="Date" />
+          <TableColumn fx:id="bandwidthColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Bandwidth (Mbps)" />
+            <TableColumn fx:id="latencyColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Latency (ms)" />
+            <TableColumn fx:id="packetLossColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="160.0" text="Packet Loss" />
         </columns>
       </TableView>
    </children>
